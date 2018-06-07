@@ -1,0 +1,17 @@
+Package: batchlasso
+Type: Package
+Title: BatchLASSO 
+Version: 0.1.0
+Author: Louis Dijkstra [aut, cre]
+Maintainer: Louis Dijkstra <dijkstra@leibniz-bips.de>
+Description: A package for using the LASSO for ranking 
+  response-exposure pairs on the basis of the highest 
+  lambda for which they first appear in the active set 
+Imports: 
+Depends: 
+	R (>= 3.2.3),
+	glmnet
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
