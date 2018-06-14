@@ -39,7 +39,7 @@
 #' }
 #'
 #' @export
-batchLASSO <- function(response, exposure, alpha = 1.0, verbose = TRUE) {
+batchLASSOorig <- function(response, exposure, alpha = 1.0, verbose = TRUE) {
 
   response <- as.matrix(response)
   exposure <- as.matrix(exposure)
@@ -81,10 +81,10 @@ batchLASSO <- function(response, exposure, alpha = 1.0, verbose = TRUE) {
     if (sum(y) != 0 & sum(y) != length(y)) {
 
       # fit the LASSO
-      fit <- oem::oem(exposure, y, alpha = alpha, family = "binomial", penalty = "lasso")
+      fit <- glmnet::glmnet(exposure, y, alpha = alpha, family = "binomial")
 
       # determine the active sets for all lambdas
-      active_sets <- fit$beta[[1]] != 0
+      active_sets <- fit$beta != 0
 
       # get for which lambda the exposure variable appears for the first time
       # in the active set
@@ -94,21 +94,18 @@ batchLASSO <- function(response, exposure, alpha = 1.0, verbose = TRUE) {
       # can later change it to 0
       first_appearance[first_appearance == 0] <- NA
 
-      # remove the intercept
-      first_appearance <- unname(first_appearance[-1])
-
       # the highest lambdas for which the variables appear for the first time
-      highest_lambda <- fit$lambda[[1]][first_appearance]
+      highest_lambda <- fit$lambda[first_appearance]
       # in case no lambda was found for that exposure, highest_lambda is set to 0
       highest_lambda[is.na(highest_lambda)] <- 0
 
       result$highest_lambda[((r-1)*n_exposures+1):(r*n_exposures)] <- highest_lambda
 
     } else {
-        warning(
-          sprintf(
-            "%s: response column %d contains only 1 or 0. Regression was not applied to this column",
-            as.character(match.call()[[1]]), r
+      warning(
+        sprintf(
+          "%s: response column %d contains only 1 or 0. Regression was not applied to this column",
+          as.character(match.call()[[1]]), r
         )
       )
     }

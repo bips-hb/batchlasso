@@ -10,7 +10,7 @@ Description: A package for using the LASSO for ranking
 Imports: 
 Depends: 
 	R (>= 3.2.3),
-	glmnet
+	oem
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
