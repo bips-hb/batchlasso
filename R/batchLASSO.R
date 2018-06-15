@@ -78,7 +78,7 @@ batchLASSO <- function(response, exposure, alpha = 1.0, verbose = TRUE) {
     }
 
     # check whether there enough observations
-    if (sum(y) != 0 & sum(y) != length(y)) {
+    if (sum(y) > 1 & sum(y) < (length(y)-1)) {
 
       # fit the LASSO
       fit <- glmnet::glmnet(exposure, y, alpha = alpha, family = "binomial")
@@ -102,14 +102,17 @@ batchLASSO <- function(response, exposure, alpha = 1.0, verbose = TRUE) {
       result$highest_lambda[((r-1)*n_exposures+1):(r*n_exposures)] <- highest_lambda
 
     } else {
-        warning(
-          sprintf(
-            "%s: response column %d contains only 1 or 0. Regression was not applied to this column",
-            as.character(match.call()[[1]]), r
+      warning(
+        sprintf(
+          "response column %d contains only 1 or 0. Regression was not applied to this column",
+          r
         )
+
       )
     }
   }
+
+  result$highest_lambda[result$highest_lambda == -1] <- 0
 
   return(result)
 }
