@@ -1,4 +1,4 @@
-## `batchLASSO` for more easily performing ROC and PRC analysis with the LASSO
+batchLASSO for more easily performing ROC and PRC analysis with the LASSO
 --------------------------------------------------------
 
 `batchLASSO` is a minimalistic `R` package for creating ROCs and 
